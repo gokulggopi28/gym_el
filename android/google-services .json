@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "499869722682",
+    "project_id": "gymel-6226b",
+    "storage_bucket": "gymel-6226b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499869722682:android:4c5f868f6cf385b5c4ed03",
+        "android_client_info": {
+          "package_name": "com.example.gym_el"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBjNMpZZ8oLAwbwFrCQzuIdzOpewc37S8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499869722682:android:189fedfaaa61cab5c4ed03",
+        "android_client_info": {
+          "package_name": "com.example.gymel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBjNMpZZ8oLAwbwFrCQzuIdzOpewc37S8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
