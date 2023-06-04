@@ -113,7 +113,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   ),
 
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(
                         visible: !_isDataMatched,
@@ -125,26 +125,29 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            checkLogin(context);
-                          } else {
-                            print('Data empty');
-                          }
-                        },
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              checkLogin(context);
+                            } else {
+                              print('Data empty');
+                            }
+                          },
 
-                        icon:  Icon(Icons.check),
-                        label:  Text('Login'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
-                          onPrimary: Colors.white,
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10),
+                          icon:  Icon(Icons.check),
+                          label:  Text('Login'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            onPrimary: Colors.white,
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 15,horizontal: 50),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 15,horizontal: 16),
                         ),
                       ),
                     ],
