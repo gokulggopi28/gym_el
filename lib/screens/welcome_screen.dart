@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gym_el/provider/auth_provider.dart';
+import 'package:gym_el/screens/member_home.dart';
 import 'package:gym_el/screens/member_login.dart';
 import 'package:gym_el/widget/custom_botton.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final ap = Provider.of<AuthProvider> (context, listen: false);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width, // Set width to full screen width
@@ -71,6 +75,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     width: double.infinity,
                     child: CustomButton(text: "Get Started",
                         onPressed: (){
+                          ap.isSignedIn == true
+                              ? Navigator.push (
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const memberhome())):
+
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) => MemberLogin()));
                         }),

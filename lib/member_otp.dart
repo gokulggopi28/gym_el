@@ -5,7 +5,8 @@ import 'package:gym_el/screens/member_login.dart';
 import 'package:pinput/pinput.dart';
 
 class MyOtp extends StatefulWidget {
-  const MyOtp({Key? key}) : super(key: key);
+  final String verificationId;
+  const MyOtp({super.key,required this.verificationId});
 
   @override
   State<MyOtp> createState() => _MyOtpState();

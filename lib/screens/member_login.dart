@@ -1,6 +1,8 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_el/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class MemberLogin extends StatefulWidget {
   const MemberLogin({Key? key}) : super(key: key);
@@ -149,19 +151,7 @@ class _MemberLoginState extends State<MemberLogin> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 25, right: 25),
                   child: ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.verifyPhoneNumber(
-                        phoneNumber:
-                            "+${selectedCountry.phoneCode}${phoneController.text}",
-                        verificationCompleted:
-                            (PhoneAuthCredential credential) {},
-                        verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verificationId, int? resendToken) {
-                          Navigator.pushNamed(context, 'otp');
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {},
-                      );
-                    },
+                    onPressed: () => sendPhoneNumber(),
                     child: const Text(
                       'Send the Code',
                       style: TextStyle(color: Colors.white),
@@ -180,5 +170,10 @@ class _MemberLoginState extends State<MemberLogin> {
         ),
       ),
     );
+  }
+  void sendPhoneNumber() {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
+    String phoneNumber = phoneController.text.trim();
+    ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
   }
 }
