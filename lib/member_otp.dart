@@ -1,7 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gym_el/member_login.dart';
+import 'package:gym_el/screens/member_login.dart';
 import 'package:pinput/pinput.dart';
 
 class MyOtp extends StatefulWidget {

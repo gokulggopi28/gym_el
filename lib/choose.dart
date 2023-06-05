@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/admin_login.dart';
-import 'package:gym_el/member_login.dart';
+import 'package:gym_el/screens/member_login.dart';
+import 'package:gym_el/screens/welcome_screen.dart';
 
 
 
@@ -38,7 +39,7 @@ class ChoosePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MemberLogin(),
+                              builder: (context) => WelcomeScreen(),
                             ),
                           );
                         },

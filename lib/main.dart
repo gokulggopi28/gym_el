@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/member_home.dart';
-import 'package:gym_el/member_login.dart';
+import 'package:gym_el/screens/member_login.dart';
 import 'package:gym_el/member_otp.dart';
 import 'package:gym_el/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
