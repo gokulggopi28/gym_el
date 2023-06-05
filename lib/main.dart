@@ -10,8 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 const SAVE_KEY_NAME = 'User logged in';
 
 Future<void> main() async {
-   // WidgetsFlutterBinding.ensureInitialized();
-   // await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -37,3 +37,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
