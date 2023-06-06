@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/admin_login.dart';
+import 'package:gym_el/member_otp.dart';
 import 'package:gym_el/screens/member_login.dart';
+import 'package:gym_el/screens/user_information.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 
 
