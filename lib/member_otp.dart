@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/provider/auth_provider.dart';
+import 'package:gym_el/screens/member_home.dart';
 import 'package:gym_el/screens/member_login.dart';
 import 'package:gym_el/screens/user_information.dart';
 import 'package:gym_el/utils/utils.dart';
@@ -112,7 +113,6 @@ class _MyOtpState extends State<MyOtp> {
                           setState(() {
                             otpCode = value;
                           });
-
                         },
                       ),
                       SizedBox(
@@ -211,6 +211,18 @@ class _MyOtpState extends State<MyOtp> {
           ap.checkExistingUser().then((value) async {
             if (value == true) {
               //user exists
+              ap.getDataFromFirestore().then(
+                    (value) => ap.saveUserDataToSP().then(
+                          (value) => ap.setSignIn().then(
+                                (value) => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const memberhome(),
+                                    ), // Materialp
+                                    (route) => false),
+                              ),
+                        ),
+                  );
             } else {
               //new user
               Navigator.pushAndRemoveUntil(

@@ -1,11 +1,11 @@
 class UserModel {
-  final String name;
-  final String email;
-  final String bio;
-  final String profilePic;
-  final String createdAt;
-  final String phoneNumber;
-  final String uid;
+  String name;
+  String email;
+  String bio;
+  String profilePic;
+  String createdAt;
+  String phoneNumber;
+  String uid;
 
   UserModel({
     required this.name,
