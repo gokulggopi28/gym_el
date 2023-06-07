@@ -5,6 +5,7 @@ import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/screens/member_login.dart';
 import 'package:gym_el/member_otp.dart';
 import 'package:gym_el/splash.dart';
+import 'package:gym_el/widget/member_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
