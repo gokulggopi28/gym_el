@@ -42,7 +42,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
       ),
       child: AnimatedSplashScreen(
         splash: Center(
-          child: Image.asset('assets/images/gymc.png',height: 700,width: 500,),
+          child: Image.asset('assets/images/gymc.png',),
         ),
         nextScreen: ChoosePage(), // Navigate to ChoosePage after the splash screen
         splashTransition: SplashTransition.sizeTransition,

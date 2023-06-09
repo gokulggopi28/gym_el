@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           'splash': (context) => ScreenSplash(),
           'login': (context) =>MemberLogin(),
           //'otp': (context) => M,
-          'home': (context) => memberhome(),
+          'home': (context) => MemberHome(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

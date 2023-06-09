@@ -83,7 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   () => Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const memberhome(),
+                                      builder: (context) => const MemberHome(),
                                     ),
                                   ),
                                 );

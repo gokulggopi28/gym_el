@@ -217,7 +217,7 @@ class _MyOtpState extends State<MyOtp> {
                                 (value) => Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const memberhome(),
+                                      builder: (context) => const MemberHome(),
                                     ), // Materialp
                                     (route) => false),
                               ),
