@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/member_home.dart';
+import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
 import 'package:gym_el/screens/member_login.dart';
 import 'package:gym_el/widget/custom_botton.dart';
 import 'package:provider/provider.dart';

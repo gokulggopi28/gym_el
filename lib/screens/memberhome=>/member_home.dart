@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
-import 'package:gym_el/carousel.dart';
+import 'package:gym_el/screens/memberhome=%3E/carousel.dart';
 import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:gym_el/widget/member_drawer.dart';
@@ -25,7 +25,7 @@ class _MemberHomeState extends State<MemberHome> {
     'https://wallpapercave.com/wp/wc1683148.jpg',
     'https://img.favpng.com/4/23/9/natural-bodybuilding-1080p-exercise-desktop-wallpaper-png-favpng-5z2Yt1SbkdiykDK3Yzn06iQcE.jpg'
   ];
-
+  
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class _MemberHomeState extends State<MemberHome> {
                         },
                         options: CarouselOptions(
                           height: 250,
-                          autoPlay: false,
+                          autoPlay: true,
                           enlargeCenterPage: true,
                           autoPlayInterval: Duration(seconds: 3),
                           onPageChanged: (index, reason) =>
@@ -94,7 +94,7 @@ class _MemberHomeState extends State<MemberHome> {
                         ),
 
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       buildIndicator(),
                     ],
                   ),
@@ -102,7 +102,7 @@ class _MemberHomeState extends State<MemberHome> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0, right: 200),
+              padding: const EdgeInsets.only(top: 30.0, right: 200),
               child: Text(
                 'New Products',
                 style: TextStyle(
@@ -115,66 +115,100 @@ class _MemberHomeState extends State<MemberHome> {
             SizedBox(height: 30),
 
             CarouselScreen(),
+            SizedBox(height: 30,),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Handle button press
+              },
+              icon: Icon(Icons.qr_code_2),
+              label: Text('SCAN QR CODE',
+                style: TextStyle(color: Colors.white),),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(200, 50),
+                primary: Colors.green
+              ),
+            ),
+
+
 
           ],
         ),
       ),
       drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(ap.userModel.name),
-              accountEmail: Text(ap.userModel.email),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-                    ? Colors.blue
-                    : Colors.white,
-                backgroundImage: NetworkImage(ap.userModel.profilePic),
-                child: Text(
-                  "",
-                  style: TextStyle(fontSize: 40.0),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: [0.0, 1.0],
+              colors: [Color(0xff378ad6), Color(0xff2a288a)],
+            ),
+          ),
+          child: ListView(
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(ap.userModel.name),
+                accountEmail: Text(ap.userModel.email),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Colors.blue
+                      : Colors.white,
+                  backgroundImage: NetworkImage(ap.userModel.profilePic),
+                  child: Text(
+                    "",
+                    style: TextStyle(fontSize: 40.0),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: [0.0, 1.0],
+                    colors: [Color(0xff378ad6), Color(0xff2a288a)],
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.account_box),
-              title: Text("About"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.money_rounded),
-              title: Text("Payment"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.grid_3x3_outlined),
-              title: Text("New Products"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.qr_code),
-              title: Text("Attendance Scanner"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Settings"),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {},
-            ),
-          ],
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text("Home",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.account_box),
+                title: Text("Membership Details",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.money_rounded),
+                title: Text("Payment",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.grid_3x3_outlined),
+                title: Text("New Products",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.qr_code),
+                title: Text("Attendance Scanner",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text("Settings",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
+
     );
   }
 

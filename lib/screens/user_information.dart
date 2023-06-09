@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gym_el/model/user_model.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/member_home.dart';
+import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
 import 'package:gym_el/utils/utils.dart';
 import 'package:provider/provider.dart';
 
