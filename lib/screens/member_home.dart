@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
+import 'package:gym_el/carousel.dart';
 import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:gym_el/widget/member_drawer.dart';
@@ -25,99 +26,99 @@ class _MemberHomeState extends State<MemberHome> {
     'https://img.favpng.com/4/23/9/natural-bodybuilding-1080p-exercise-desktop-wallpaper-png-favpng-5z2Yt1SbkdiykDK3Yzn06iQcE.jpg'
   ];
 
+
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
-        bottomNavigationBar: const HomeBottomNavigation(),
-    appBar: AppBar(
-    backgroundColor: Colors.blue[500],
-    elevation: 0,
-    title: const Text("Homescreen"),
-    actions: [
-    IconButton(
-    icon: Icon(Icons.search),
-    onPressed: () {},
-    ),
-    IconButton(
-    icon: Icon(Icons.shopping_cart),
-    onPressed: () {},
-    ),
-    IconButton(
-    onPressed: () {
-    ap.userSignOut().then(
-    (value) => Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) => const WelcomeScreen(),
-    ),
-    ),
-    );
-    },
-    icon: const Icon(Icons.exit_to_app),
-    ),
-    ],
-    ),
-    body: Container(
-    decoration: BoxDecoration(
-    gradient: LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    stops: const [0.0, 1.0],
-    colors: [Color(0xff378ad6), Color(0xff2a288a)],
-    ),
-    ),
-      child: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CarouselSlider.builder(
-                          itemCount: urlImages.length,
-                          itemBuilder: (context, index, realIndex) {
-                            final urlImage = urlImages[index];
-                            return buildImage(urlImage, index);
-                          },
-                          options: CarouselOptions(
-                            height: 150,
-                            autoPlay: false,
-                            enlargeCenterPage: true,
-                            autoPlayInterval: Duration(seconds: 3),
-                            onPageChanged: (index, reason) =>
-                                setState(() => activeIndex = index),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        buildIndicator(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 18.0, right: 200),
-                child: Text(
-                  'New Products',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+      bottomNavigationBar: const HomeBottomNavigation(),
+      appBar: AppBar(
+        backgroundColor: Colors.blue[500],
+        elevation: 0,
+        title: const Text("Homescreen"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {},
+          ),
+          IconButton(
+            onPressed: () {
+              ap.userSignOut().then(
+                    (value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
                   ),
                 ),
-              ),
-              SizedBox(height: 16),
-
-            ],
+              );
+            },
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 1.0],
+            colors: [Color(0xff378ad6), Color(0xff2a288a)],
           ),
         ),
-      ),
-    ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: urlImages.length,
+                        itemBuilder: (context, index, realIndex) {
+                          final urlImage = urlImages[index];
+                          return buildImage(urlImage, index);
+                        },
+                        options: CarouselOptions(
+                          height: 250,
+                          autoPlay: false,
+                          enlargeCenterPage: true,
+                          autoPlayInterval: Duration(seconds: 3),
+                          onPageChanged: (index, reason) =>
+                              setState(() => activeIndex = index),
+                        ),
 
+                      ),
+                      const SizedBox(height: 40),
+                      buildIndicator(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, right: 200),
+              child: Text(
+                'New Products',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+
+            CarouselScreen(),
+
+          ],
+        ),
+      ),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -178,8 +179,7 @@ class _MemberHomeState extends State<MemberHome> {
   }
 
   Widget buildImage(String urlImage, int index) => Container(
-    margin: EdgeInsets.symmetric(horizontal: 20),
-    color: Colors.white,
+    margin: EdgeInsets.only(left: 10,right: 10),
     child: Image.network(
       urlImage,
       fit: BoxFit.cover,
@@ -196,5 +196,4 @@ class _MemberHomeState extends State<MemberHome> {
       activeDotColor: Colors.white,
     ),
   );
-
 }
