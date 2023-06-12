@@ -17,12 +17,15 @@ class CarouselScreen extends StatelessWidget {
               MaterialPageRoute(builder: (context) => ProductPage()),
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40.0),
-              color: Colors.red,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40.0),
+                color: Colors.red,
+              ),
+              child: Image.asset('assets/images/whey.jpg'),
             ),
-            child: Image.asset('assets/images/whey.jpg'),
           ),
         ),
         GestureDetector(
@@ -32,12 +35,15 @@ class CarouselScreen extends StatelessWidget {
               MaterialPageRoute(builder: (context) => ProductPage()),
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.blue,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.blue,
+              ),
+              child: Image.asset('assets/images/prot.webp'),
             ),
-            child: Image.asset('assets/images/prot.webp'),
           ),
         ),
         GestureDetector(
@@ -47,18 +53,22 @@ class CarouselScreen extends StatelessWidget {
               MaterialPageRoute(builder: (context) => ProductPage()),
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.green,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.green,
+              ),
+              child: Image.asset('assets/images/prot2.jpg'),
             ),
-            child: Image.asset('assets/images/prot2.jpg'),
           ),
         ),
       ],
       options: CarouselOptions(
         height: 200,
-        autoPlay: true,
+        autoPlay: false,
         enableInfiniteScroll: true,
         viewportFraction: 1.0,
         enlargeCenterPage: false,

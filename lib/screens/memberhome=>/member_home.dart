@@ -1,11 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
+import 'package:gym_el/provider/qr_code.dart';
 import 'package:gym_el/screens/memberhome=%3E/carousel.dart';
 import 'package:gym_el/provider/auth_provider.dart';
+import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
+import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:gym_el/widget/member_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MemberHome extends StatefulWidget {
@@ -16,6 +20,9 @@ class MemberHome extends StatefulWidget {
 }
 
 class _MemberHomeState extends State<MemberHome> {
+  QRViewController? controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QrScannerOverlayShape overlay = QrScannerOverlayShape();
   int activeIndex = 0;
   final urlImages = [
     'https://www.shutterstock.com/image-photo/muscular-man-showing-muscles-on-260nw-1686329977.jpg',
@@ -69,69 +76,82 @@ class _MemberHomeState extends State<MemberHome> {
             colors: [Color(0xff378ad6), Color(0xff2a288a)],
           ),
         ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Column(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CarouselSlider.builder(
-                        itemCount: urlImages.length,
-                        itemBuilder: (context, index, realIndex) {
-                          final urlImage = urlImages[index];
-                          return buildImage(urlImage, index);
-                        },
-                        options: CarouselOptions(
-                          height: 250,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          autoPlayInterval: Duration(seconds: 3),
-                          onPageChanged: (index, reason) =>
-                              setState(() => activeIndex = index),
-                        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CarouselSlider.builder(
+                          itemCount: urlImages.length,
+                          itemBuilder: (context, index, realIndex) {
+                            final urlImage = urlImages[index];
+                            return buildImage(urlImage, index);
+                          },
+                          options: CarouselOptions(
+                            height: 250,
+                            autoPlay: false,
+                            enlargeCenterPage: true,
+                            autoPlayInterval: Duration(seconds: 3),
+                            onPageChanged: (index, reason) =>
+                                setState(() => activeIndex = index),
+                          ),
 
-                      ),
-                      const SizedBox(height: 20),
-                      buildIndicator(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0, right: 200),
-              child: Text(
-                'New Products',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25
+                        ),
+                        const SizedBox(height: 20),
+                        buildIndicator(),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 30),
-
-            CarouselScreen(),
-            SizedBox(height: 30,),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Handle button press
-              },
-              icon: Icon(Icons.qr_code_2),
-              label: Text('SCAN QR CODE',
-                style: TextStyle(color: Colors.white),),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(200, 50),
-                primary: Colors.green
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0, right: 200),
+                child: Text(
+                  'New Products',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 30),
+
+              CarouselScreen(),
+              SizedBox(height: 30,),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QRViewerScreen(),
+                    ),
+                  );
+
+
+                  // Handle button press
+                },
+                icon: Icon(Icons.qr_code_2),
+                label: Text('SCAN QR CODE',
+                  style: TextStyle(color: Colors.white),),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(200, 50),
+                  primary: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  )
+                ),
+              ),
 
 
 
-          ],
+            ],
+          ),
         ),
       ),
       drawer: Drawer(
@@ -178,6 +198,16 @@ class _MemberHomeState extends State<MemberHome> {
                 leading: Icon(Icons.account_box),
                 title: Text("Membership Details",style: TextStyle(color: Colors.white),),
                 trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Membership_details()), (route) => false);
+
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.verified_user),
+                title: Text("Profile Settings",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
@@ -199,10 +229,31 @@ class _MemberHomeState extends State<MemberHome> {
                 onTap: () {},
               ),
               ListTile(
+                leading: Icon(Icons.file_open),
+                title: Text("Orders",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {},
+              ),
+              ListTile(
                 leading: Icon(Icons.settings),
                 title: Text("Settings",style: TextStyle(color: Colors.white),),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.logout_outlined),
+                title: Text("Logout",style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  ap.userSignOut().then(
+                        (value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen(),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -214,9 +265,12 @@ class _MemberHomeState extends State<MemberHome> {
 
   Widget buildImage(String urlImage, int index) => Container(
     margin: EdgeInsets.only(left: 10,right: 10),
-    child: Image.network(
-      urlImage,
-      fit: BoxFit.cover,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(70),
+      child: Image.network(
+        urlImage,
+        fit: BoxFit.cover,
+      ),
     ),
   );
 
