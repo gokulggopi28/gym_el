@@ -67,7 +67,7 @@ class CarouselScreen extends StatelessWidget {
         ),
       ],
       options: CarouselOptions(
-        height: 200,
+        height: 150,
         autoPlay: false,
         enableInfiniteScroll: true,
         viewportFraction: 1.0,

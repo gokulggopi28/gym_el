@@ -1,43 +1,21 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
-import 'package:gym_el/provider/qr_code.dart';
-import 'package:gym_el/screens/memberhome=%3E/carousel.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/memberhome=%3E/home_member.dart';
+import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
 import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
-import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
+import 'package:gym_el/screens/memberhome=%3E/mycarousal.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
-import 'package:gym_el/widget/member_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class MemberHome extends StatefulWidget {
-  const MemberHome({Key? key}) : super(key: key);
-
-  @override
-  State<MemberHome> createState() => _MemberHomeState();
-}
-
-class _MemberHomeState extends State<MemberHome> {
+class HomeMemberPage extends StatelessWidget {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QrScannerOverlayShape overlay = QrScannerOverlayShape();
   int activeIndex = 0;
-  final urlImages = [
-    'https://www.shutterstock.com/image-photo/muscular-man-showing-muscles-on-260nw-1686329977.jpg',
-    'https://media.istockphoto.com/id/612262390/photo/body-building-workout.jpg?s=612x612&w=0&k=20&c=zsRgRf3tuStA7dN5bdFS_x1ud-XdU-dJC7B6iuq_AZk=',
-    'https://media.istockphoto.com/id/479009182/photo/silhouette-of-a-strong-fighter.jpg?s=612x612&w=0&k=20&c=eqC_1o48WNIxNZIyJrHl8nDLmYC7RtSKq1lJVmDS9GU=',
-    'https://t3.ftcdn.net/jpg/01/83/37/72/360_F_183377230_aM8xRw22OMCnbWXYRajuZdAuV94InnkD.jpg',
-    'https://wallpapercave.com/wp/wc1683148.jpg',
-    'https://img.favpng.com/4/23/9/natural-bodybuilding-1080p-exercise-desktop-wallpaper-png-favpng-5z2Yt1SbkdiykDK3Yzn06iQcE.jpg'
-  ];
-  
-
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
       bottomNavigationBar: const HomeBottomNavigation(),
       appBar: AppBar(
@@ -46,18 +24,16 @@ class _MemberHomeState extends State<MemberHome> {
         title: const Text("Homescreen"),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {},
           ),
           IconButton(
             icon: Icon(Icons.more_horiz),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => MemberHome()), (route) => false);
+            },
           ),
-
         ],
       ),
       body: Container(
@@ -72,78 +48,73 @@ class _MemberHomeState extends State<MemberHome> {
         ),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CarouselSlider.builder(
-                          itemCount: urlImages.length,
-                          itemBuilder: (context, index, realIndex) {
-                            final urlImage = urlImages[index];
-                            return buildImage(urlImage, index);
-                          },
-                          options: CarouselOptions(
-                            height: 250,
-                            autoPlay: false,
-                            enlargeCenterPage: true,
-                            autoPlayInterval: Duration(seconds: 3),
-                            onPageChanged: (index, reason) =>
-                                setState(() => activeIndex = index),
-                          ),
-
-                        ),
-                        const SizedBox(height: 20),
-                        buildIndicator(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, right: 200),
-                child: Text(
-                  'New Products',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20
+                padding: const EdgeInsets.all(16.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Search for products...',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16.0),
+              Container(
+                height: 200.0,
 
-              CarouselScreen(),
-              SizedBox(height: 30,),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QRViewerScreen(),
-                    ),
-                  );
+                    child: Container(
+                      width: 200.0,
+                      margin: EdgeInsets.symmetric(horizontal: 8.0),
+                      color: Colors.blue,
+                      child: Center(
+                        child: MyCarousel(),
+                      ),
 
 
-                  // Handle button press
-                },
-                icon: Icon(Icons.qr_code_2),
-                label: Text('SCAN QR CODE',
-                  style: TextStyle(color: Colors.white),),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200, 50),
-                  primary: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  )
                 ),
               ),
-
-
-
+              SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Categories',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.category),
+                        SizedBox(height: 8.0),
+                        Text(
+                          'Category ${index + 1}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        ElevatedButton(onPressed: () {}, child: Text('Product Store')),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -158,7 +129,7 @@ class _MemberHomeState extends State<MemberHome> {
               colors: [Color(0xff378ad6), Color(0xff2a288a)],
             ),
           ),
-          child: ListView(
+          child: Column(
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(ap.userModel.name),
@@ -184,47 +155,67 @@ class _MemberHomeState extends State<MemberHome> {
               ),
               ListTile(
                 leading: Icon(Icons.home),
-                title: Text("Home",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Home",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.account_box),
-                title: Text("Membership Details",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Membership Details",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => Membership_details()), (route) => false);
-
                 },
               ),
               ListTile(
                 leading: Icon(Icons.verified_user),
-                title: Text("Profile Settings",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Profile Settings",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.money_rounded),
-                title: Text("Payment",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Payment",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.grid_3x3_outlined),
-                title: Text("New Products",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "New Products",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.qr_code),
-                title: Text("Attendance Scanner",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Attendance Scanner",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.file_open),
-                title: Text("Orders",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Orders",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
@@ -233,13 +224,19 @@ class _MemberHomeState extends State<MemberHome> {
               ),
               ListTile(
                 leading: Icon(Icons.settings),
-                title: Text("Settings",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Settings",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.logout_outlined),
-                title: Text("Logout",style: TextStyle(color: Colors.white),),
+                title: Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   ap.userSignOut().then(
@@ -256,29 +253,6 @@ class _MemberHomeState extends State<MemberHome> {
           ),
         ),
       ),
-
     );
   }
-
-  Widget buildImage(String urlImage, int index) => Container(
-    margin: EdgeInsets.only(left: 10,right: 10),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(70),
-      child: Image.network(
-        urlImage,
-        fit: BoxFit.cover,
-      ),
-    ),
-  );
-
-  Widget buildIndicator() => AnimatedSmoothIndicator(
-    activeIndex: activeIndex,
-    count: urlImages.length,
-    effect: JumpingDotEffect(
-      dotWidth: 10,
-      dotHeight: 10,
-      dotColor: Colors.green,
-      activeDotColor: Colors.white,
-    ),
-  );
 }
