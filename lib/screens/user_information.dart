@@ -41,6 +41,19 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.blue[500],
+          elevation: 0,
+          title: const Text("Homescreen"),
+          actions: [
+      IconButton(
+        icon: Icon(Icons.more_horiz),
+        onPressed: () {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => MemberHome()), (route) => false);
+        },
+      ),
+    ],),
       body: SafeArea(
         child: isLoading == true
             ? const Center(

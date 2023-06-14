@@ -35,6 +35,7 @@ class _MyCarouselState extends State<MyCarousel> {
               autoPlayInterval: Duration(seconds: 3),
               onPageChanged: (index, reason) =>
                   setState(() => activeIndex = index),
+              viewportFraction: 0.4,
             ),
           ),
         ),

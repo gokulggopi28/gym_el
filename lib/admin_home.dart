@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/admin_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,45 +36,82 @@ class ScreenHome extends StatelessWidget {
                   colors: [Color(0xff378ad6), Color(0xff2a288a)],
                 ),
               ),
-              child:  Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children:  [
-                          Image.asset('assets/images/man.png',height: 40),
-                          const SizedBox(width: 10,),
-                          const Text(
-                            'Welcome, Possessor',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 60),
-                      const Text(
-                        'Dashboard',textAlign: TextAlign.center
-                        ,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasData) {
+                    final user = snapshot.data!;
+
+                    bool isAdmin = false;
+
+                    if (isAdmin) {
+                      return buildAdminContent();
+                    } else {
+                      return buildNonAdminContent();
+                    }
+                  } else {
+                    return buildNonAdminContent();
+                  }
+                },
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAdminContent() {
+    // Widget tree for the admin view
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset('assets/images/man.png', height: 40),
+                const SizedBox(width: 10,),
+                const Text(
+                  'Welcome, Possessor',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 60),
+            const Text(
+              'Dashboard',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildNonAdminContent() {
+    // Widget tree for the non-admin view
+    return Center(
+      child: Text(
+        'You do not have admin privileges.',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
         ),
       ),
     );

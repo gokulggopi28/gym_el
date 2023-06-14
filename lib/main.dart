@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_el/admin_home.dart';
+import 'package:gym_el/screens/memberhome=%3E/home_member.dart';
 import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
 import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/screens/member_login.dart';
@@ -36,7 +38,8 @@ class MyApp extends StatelessWidget {
           'splash': (context) => ScreenSplash(),
           'login': (context) =>MemberLogin(),
           //'otp': (context) => M,
-          'home': (context) => MemberHome(),
+          'home': (context) => HomeMemberPage(),
+          'admin_home':(context) => ScreenHome(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

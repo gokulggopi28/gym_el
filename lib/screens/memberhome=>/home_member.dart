@@ -4,6 +4,7 @@ import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
 import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
 import 'package:gym_el/screens/memberhome=%3E/mycarousal.dart';
+import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -13,6 +14,7 @@ class HomeMemberPage extends StatelessWidget {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QrScannerOverlayShape overlay = QrScannerOverlayShape();
   int activeIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: true);
@@ -31,7 +33,8 @@ class HomeMemberPage extends StatelessWidget {
             icon: Icon(Icons.more_horiz),
             onPressed: () {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => MemberHome()), (route) => false);
+                  MaterialPageRoute(builder: (context) => MemberHome()),
+                      (route) => false);
             },
           ),
         ],
@@ -54,7 +57,11 @@ class HomeMemberPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
                   decoration: InputDecoration(
+
                     hintText: 'Search for products...',
+                    hintStyle: TextStyle(
+                      color: Colors.white
+                    ),
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(),
                   ),
@@ -63,16 +70,8 @@ class HomeMemberPage extends StatelessWidget {
               SizedBox(height: 16.0),
               Container(
                 height: 200.0,
-
-                    child: Container(
-                      width: 200.0,
-                      margin: EdgeInsets.symmetric(horizontal: 8.0),
-                      color: Colors.blue,
-                      child: Center(
-                        child: MyCarousel(),
-                      ),
-
-
+                child: Center(
+                  child: MyCarousel(),
                 ),
               ),
               SizedBox(height: 16.0),
@@ -109,7 +108,8 @@ class HomeMemberPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        ElevatedButton(onPressed: () {}, child: Text('Product Store')),
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Product Store')),
                       ],
                     ),
                   );
@@ -135,7 +135,8 @@ class HomeMemberPage extends StatelessWidget {
                 accountName: Text(ap.userModel.name),
                 accountEmail: Text(ap.userModel.email),
                 currentAccountPicture: CircleAvatar(
-                  backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
+                  backgroundColor:
+                  Theme.of(context).platform == TargetPlatform.iOS
                       ? Colors.blue
                       : Colors.white,
                   backgroundImage: NetworkImage(ap.userModel.profilePic),
@@ -171,7 +172,9 @@ class HomeMemberPage extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => Membership_details()), (route) => false);
+                      MaterialPageRoute(
+                          builder: (context) => Membership_details()),
+                          (route) => false);
                 },
               ),
               ListTile(
@@ -208,7 +211,16 @@ class HomeMemberPage extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QRViewerScreen(),
+                    ),
+                  );
+
+
+                },
               ),
               ListTile(
                 leading: Icon(Icons.file_open),
@@ -219,7 +231,8 @@ class HomeMemberPage extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => HomeMemberPage()), (route) => false);
+                      MaterialPageRoute(builder: (context) => HomeMemberPage()),
+                          (route) => false);
                 },
               ),
               ListTile(
@@ -253,6 +266,25 @@ class HomeMemberPage extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: buildNavigateButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  Widget buildNavigateButton(BuildContext context) => FloatingActionButton.extended(
+    icon: Icon(Icons.qr_code_2),
+    label: Text('Scan QR Code'),
+    backgroundColor: Colors.green,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QRViewerScreen(),
+        ),
+      );
+    },
+  );
 }

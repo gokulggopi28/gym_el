@@ -1,10 +1,8 @@
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/choose.dart';
+import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
 
 import 'main.dart';
 
@@ -42,9 +40,13 @@ class _ScreenSplashState extends State<ScreenSplash> {
       ),
       child: AnimatedSplashScreen(
         splash: Center(
-          child: Image.asset('assets/images/gymc.png',),
+          child: Image.asset(
+            'assets/images/gymc.png',
+            width: MediaQuery.of(context).size.width * 10, // Set the desired width
+            height: MediaQuery.of(context).size.height * 10, // Set the desired height
+          ),
         ),
-        nextScreen: ChoosePage(), // Navigate to ChoosePage after the splash screen
+        nextScreen: WelcomeScreen(), // Navigate to ChoosePage after the splash screen
         splashTransition: SplashTransition.sizeTransition,
         backgroundColor: Colors.transparent, // Set the background color to transparent
         duration: 3000,
@@ -63,7 +65,6 @@ class _ScreenSplashState extends State<ScreenSplash> {
         //     }
         //   },
         // ),
-
       ),
     );
   }
