@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
+import 'package:gym_el/screens/memberhome=%3E/home_member.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class Membership_details extends StatelessWidget {
                     (value) => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MemberHome(),
+                    builder: (context) => HomeMemberPage(),
                   ),
                 ),
               );

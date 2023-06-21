@@ -151,7 +151,7 @@ class _MemberLoginState extends State<MemberLogin> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 25, right: 25),
                   child: ElevatedButton(
-                    onPressed: () => sendPhoneNumber(),
+                    onPressed: ()  => sendPhoneNumber(),
                     child: const Text(
                       'Send the Code',
                       style: TextStyle(color: Colors.white),

@@ -5,6 +5,7 @@ class UserModel {
   String profilePic;
   String createdAt;
   String phoneNumber;
+
   String uid;
 
   UserModel({
@@ -25,7 +26,7 @@ class UserModel {
         profilePic: map['profilePic'] ?? '',
         createdAt: map['createdAt'] ?? '',
         phoneNumber: map['phoneNumber'] ?? '',
-        uid: map['uid'] ?? ''
+        uid: map['uid'] ?? '',
     );
   }
   //to map
@@ -37,7 +38,7 @@ class UserModel {
       "profilePic":profilePic,
       "createdAt":createdAt,
       "phoneNumber":phoneNumber,
-      "uid":uid
+      "uid":uid,
     };
   }
 }

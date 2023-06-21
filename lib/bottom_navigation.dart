@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gym_el/admin_home.dart';
+import 'package:gym_el/screens/AdminHome/admin_home.dart';
 
 
 

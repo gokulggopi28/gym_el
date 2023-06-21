@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/memberhome=%3E/member_home.dart';
+import 'package:gym_el/provider/cart.dart';
+import 'package:gym_el/screens/memberhome=%3E/cartScreen.dart';
 import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
 import 'package:gym_el/screens/memberhome=%3E/mycarousal.dart';
+import 'package:gym_el/screens/memberhome=%3E/orders_screen.dart';
+import 'package:gym_el/screens/memberhome=%3E/products_overview_screen.dart';
 import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
+import 'package:gym_el/screens/memberhome=%3E/user_product_screen.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
+import 'package:gym_el/widget/badge.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -17,6 +22,7 @@ class HomeMemberPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _showFavouritesOnly = false;
     final ap = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
       bottomNavigationBar: const HomeBottomNavigation(),
@@ -24,20 +30,54 @@ class HomeMemberPage extends StatelessWidget {
         backgroundColor: Colors.blue[500],
         elevation: 0,
         title: const Text("Homescreen"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.more_horiz),
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => MemberHome()),
-                      (route) => false);
-            },
-          ),
+        actions: [PopupMenuButton(
+          onSelected: (FilterOption value) => {(
+                  () => {
+                if (value == FilterOption.favorite)
+                  {_showFavouritesOnly = true}
+                else
+                  {_showFavouritesOnly = false}
+              },
+            )
+          },
+          itemBuilder: (_) => [
+            const PopupMenuItem(
+              value: FilterOption.favorite,
+              child: Text('Only Favourites'),
+            ),
+            const PopupMenuItem(
+              value: FilterOption.all,
+              child: Text('All'),
+            ),
+          ],
+          icon: const Icon(Icons.more_vert),
+        ),
+          Consumer<Cart>(
+            builder: (_, cartData, ch) => CustomBadge(
+              value: cartData.itemCount.toString(),
+              child: ch as Widget,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () => {
+                Navigator.of(context).pushNamed(CartScreen.routeName),
+              },
+            ),
+          )
         ],
+
+          // IconButton(
+          //   icon: Icon(Icons.shopping_cart),
+          //   onPressed: () {},
+          // ),
+          // IconButton(
+          //   icon: Icon(Icons.more_horiz),
+          //   onPressed: () {
+          //     Navigator.of(context).pushAndRemoveUntil(
+          //         MaterialPageRoute(builder: (context) => MemberHome()),
+          //             (route) => false);
+          //   },
+          // ),
       ),
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -87,6 +127,9 @@ class HomeMemberPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.0),
+
+
+
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -109,7 +152,16 @@ class HomeMemberPage extends StatelessWidget {
                           ),
                         ),
                         ElevatedButton(
-                            onPressed: () {}, child: Text('Product Store')),
+                            onPressed: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(builder: (context) => ProductOverviewScreen(),
+
+                                  ),
+                                    (route) => true,
+
+                              );
+
+                            }, child: Text('Product Store')),
                       ],
                     ),
                   );
@@ -195,15 +247,8 @@ class HomeMemberPage extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
-              ListTile(
-                leading: Icon(Icons.grid_3x3_outlined),
-                title: Text(
-                  "New Products",
-                  style: TextStyle(color: Colors.white),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {},
-              ),
+
+
               ListTile(
                 leading: Icon(Icons.qr_code),
                 title: Text(
@@ -230,9 +275,7 @@ class HomeMemberPage extends StatelessWidget {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => HomeMemberPage()),
-                          (route) => false);
+                  Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
                 },
               ),
               ListTile(
