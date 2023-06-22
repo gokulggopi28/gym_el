@@ -91,6 +91,8 @@ flutter:
     - assets/images/prot2.jpg
     - assets/images/prot.webp
     - assets/images/multi.webp
+    - assets/images/dumbel.jpeg.webp
+    - assets/images/grip.jpg.webp
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -33,7 +33,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         })
       });
     }
-    _init = true;
+    _init = false;
     super.didChangeDependencies();
   }
 
@@ -41,7 +41,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shop'),
+        title: const Text('Suppliments'),
         actions: [
           PopupMenuButton(
             onSelected: (FilterOption value) => {

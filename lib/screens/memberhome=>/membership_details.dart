@@ -20,7 +20,9 @@ class Membership_details extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+
+            },
           ),
           IconButton(
             icon: Icon(Icons.shopping_cart),

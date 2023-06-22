@@ -113,8 +113,9 @@ class ScreenHome extends StatelessWidget {
                 ),),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () => {
-                  Navigator.of(context)
-                      .pushReplacementNamed(UserProductsScreen.routeName),
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) =>UserProductsScreen()),
+                          (route) => true),
                 },
               ),
 
@@ -142,7 +143,8 @@ class ScreenHome extends StatelessWidget {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+                  Navigator.of(context)
+                      .pushReplacementNamed(OrdersScreen.routeName);
                 },
               ),
               ListTile(
