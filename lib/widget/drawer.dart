@@ -26,14 +26,7 @@ class AppDrawer extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName)
           },
         ),
-        ListTile(
-          leading: const Icon(Icons.edit),
-          title: const Text('Manage Products'),
-          onTap: () => {
-            Navigator.of(context)
-                .pushReplacementNamed(UserProductsScreen.routeName),
-          },
-        )
+
       ]),
     );
   }

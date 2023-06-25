@@ -1,4 +1,4 @@
 class AppConstants {
   static const baseUrl =
-      'https://flutter-shopping-app-9dd6d-default-rtdb.firebaseio.com';
+      'https://gymelite-53198-default-rtdb.firebaseio.com/';
 }

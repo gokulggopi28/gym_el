@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:gym_el/screens/memberhome=%3E/products.dart';
+import 'package:gym_el/screens/memberhome=%3E/produc.dart';
 
 class CarouselScreen extends StatelessWidget {
   final CarouselController _carouselController = CarouselController();

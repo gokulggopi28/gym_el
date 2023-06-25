@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gym_el/constants/app_constants.dart';
 import 'package:http/http.dart' as http;
+
+import '../constants/app_constants.dart';
 
 class Product with ChangeNotifier {
   final String id;

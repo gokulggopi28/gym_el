@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
 import 'package:gym_el/provider/auth_provider.dart';
 import 'package:gym_el/provider/cart.dart';
+import 'package:gym_el/provider/qrnew.dart';
 import 'package:gym_el/screens/memberhome=%3E/cartScreen.dart';
 import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
 import 'package:gym_el/screens/memberhome=%3E/mycarousal.dart';
@@ -22,6 +23,17 @@ class HomeMemberPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> imagePaths = [
+      'assets/images/whey.jpg',
+      'assets/images/prot2.jpg',
+      'assets/images/prot.webp',
+      'assets/images/whey.jpg',
+      'assets/images/prot2.jpg',
+      'assets/images/mass.webp',
+
+
+
+    ];
     var _showFavouritesOnly = false;
     final ap = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
@@ -32,13 +44,13 @@ class HomeMemberPage extends StatelessWidget {
         title: const Text("Homescreen"),
         actions: [PopupMenuButton(
           onSelected: (FilterOption value) => {(
-                  () => {
-                if (value == FilterOption.favorite)
-                  {_showFavouritesOnly = true}
-                else
-                  {_showFavouritesOnly = false}
-              },
-            )
+              () => {
+            if (value == FilterOption.favorite)
+              {_showFavouritesOnly = true}
+            else
+              {_showFavouritesOnly = false}
+          },
+          )
           },
           itemBuilder: (_) => [
             const PopupMenuItem(
@@ -66,18 +78,18 @@ class HomeMemberPage extends StatelessWidget {
           )
         ],
 
-          // IconButton(
-          //   icon: Icon(Icons.shopping_cart),
-          //   onPressed: () {},
-          // ),
-          // IconButton(
-          //   icon: Icon(Icons.more_horiz),
-          //   onPressed: () {
-          //     Navigator.of(context).pushAndRemoveUntil(
-          //         MaterialPageRoute(builder: (context) => MemberHome()),
-          //             (route) => false);
-          //   },
-          // ),
+        // IconButton(
+        //   icon: Icon(Icons.shopping_cart),
+        //   onPressed: () {},
+        // ),
+        // IconButton(
+        //   icon: Icon(Icons.more_horiz),
+        //   onPressed: () {
+        //     Navigator.of(context).pushAndRemoveUntil(
+        //         MaterialPageRoute(builder: (context) => MemberHome()),
+        //             (route) => false);
+        //   },
+        // ),
       ),
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -96,14 +108,19 @@ class HomeMemberPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
+                  cursorColor: Colors.white,
+
                   decoration: InputDecoration(
 
                     hintText: 'Search for products...',
                     hintStyle: TextStyle(
-                      color: Colors.white
+                        color: Colors.white
                     ),
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(
+                      Icons.search,color: Colors.white,),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
@@ -130,6 +147,7 @@ class HomeMemberPage extends StatelessWidget {
 
 
 
+
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -139,31 +157,32 @@ class HomeMemberPage extends StatelessWidget {
                 itemCount: 6,
                 itemBuilder: (context, index) {
                   return Card(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.category),
-                        SizedBox(height: 8.0),
-                        Text(
-                          'Category ${index + 1}',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
+                    child: ListView(
+                      children: [Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(imagePaths[index]),
+                          Text(
+                            'Suppliments ${index + 1}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(builder: (context) => ProductOverviewScreen(),
 
                                   ),
-                                    (route) => true,
+                                      (route) => true,
 
-                              );
+                                );
 
-                            }, child: Text('Product Store')),
-                      ],
-                    ),
+                              }, child: Text('Product Store')),
+                        ],
+                      ),
+                      ],),
                   );
                 },
               ),
@@ -226,7 +245,7 @@ class HomeMemberPage extends StatelessWidget {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => Membership_details()),
-                          (route) => false);
+                          (route) => true);
                 },
               ),
               ListTile(
@@ -275,7 +294,10 @@ class HomeMemberPage extends StatelessWidget {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+                  Navigator.of(context).
+                  pushAndRemoveUntil(MaterialPageRoute(
+                      builder: (context) => OrdersScreen()),
+                          (route) => true);
                 },
               ),
               ListTile(
@@ -285,7 +307,11 @@ class HomeMemberPage extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {},
+                onTap: () {
+
+                  Navigator.of(context)
+                      .pushReplacementNamed(UserProductsScreen.routeName);
+                },
               ),
               ListTile(
                 leading: Icon(Icons.logout_outlined),
@@ -325,9 +351,10 @@ class HomeMemberPage extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => QRViewerScreen(),
+          builder: (context) => QRViewExample(),
         ),
       );
     },
   );
 }
+

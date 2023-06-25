@@ -80,18 +80,16 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
-      drawer: const AppDrawer(),
     body: Container(
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.height,
     decoration: BoxDecoration(
     gradient: LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    stops: const [0.0, 1.0],
+    stops: [0.0, 1.0],
     colors: [Color(0xff378ad6), Color(0xff2a288a)],
     ),
     ),
+      //drawer: const AppDrawer(),
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ProductsGrid(isFav: _showFavouritesOnly),

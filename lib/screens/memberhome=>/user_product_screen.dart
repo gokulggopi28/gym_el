@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gym_el/provider/products.dart';
-import 'package:gym_el/screens/memberhome=%3E/edit_product_screen.dart';
 import 'package:gym_el/widget/drawer.dart';
 import 'package:gym_el/widget/user_product_item.dart';
 import 'package:provider/provider.dart';
+import 'edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';

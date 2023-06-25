@@ -106,17 +106,7 @@ class ScreenHome extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {},
               ),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Manage Products',style: TextStyle(
-                  color: Colors.white
-                ),),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () => {
-                  Navigator.of(context)
-                      .pushReplacementNamed(UserProductsScreen.routeName),
-                },
-              ),
+
 
               ListTile(
                 leading: Icon(Icons.qr_code),
@@ -142,7 +132,16 @@ class ScreenHome extends StatelessWidget {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
+
                   Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text('Manage Products'),
+                onTap: () => {
+                  Navigator.of(context)
+                      .pushReplacementNamed(UserProductsScreen.routeName),
                 },
               ),
               ListTile(
