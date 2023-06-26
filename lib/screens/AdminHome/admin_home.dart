@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/provider/auth_provider.dart';
+import 'package:gym_el/screens/AdminHome/Attendance_list_page.dart';
 import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
 import 'package:gym_el/screens/memberhome=%3E/orders_screen.dart';
 import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
@@ -30,6 +31,7 @@ class ScreenHome extends StatelessWidget {
           )
         ],
       ),
+
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
@@ -56,14 +58,7 @@ class ScreenHome extends StatelessWidget {
                     style: TextStyle(fontSize: 40.0),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.0, 1.0],
-                    colors: [Color(0xff378ad6), Color(0xff2a288a)],
-                  ),
-                ),
+
               ),
               ListTile(
                 leading: Icon(Icons.home),
@@ -109,19 +104,18 @@ class ScreenHome extends StatelessWidget {
 
 
               ListTile(
-                leading: Icon(Icons.qr_code),
+                leading: Icon(Icons.list),
                 title: Text(
-                  "Attendance Scanner",
+                  "Attendance List",
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QRViewerScreen(),
-                    ),
-                  );
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => AttendanceListPage()),
+                          (route) => true);
+
                 },
               ),
               ListTile(
@@ -132,16 +126,29 @@ class ScreenHome extends StatelessWidget {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => OrdersScreen()),
+                          (route) => true);
 
-                  Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.edit),
-                title: const Text('Manage Products'),
+                title: const Text('Manage Products',style: TextStyle(
+                  color: Colors.white
+                ),),
+                trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () => {
-                  Navigator.of(context)
-                      .pushReplacementNamed(UserProductsScreen.routeName),
+                Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                builder: (context) => UserProductsScreen()),
+                (route) => true)
+
+
+                  // Navigator.of(context)
+                  //     .pushReplacementNamed(UserProductsScreen.routeName),
                 },
               ),
               ListTile(
@@ -181,6 +188,8 @@ class ScreenHome extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: Form(
               child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -262,6 +271,10 @@ class ScreenHome extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
+            //Expanded(child: AttendanceListPage(),)
+
+
             // GridView.builder(
             //     shrinkWrap: true,
             //     itemCount: _dashboardItem.length,
@@ -306,7 +319,7 @@ class ScreenHome extends StatelessWidget {
     await _sharedPrefs.clear();
     Navigator.of(ctx).pushAndRemoveUntil(
       MaterialPageRoute(builder: (ctx1) => WelcomeScreen()),
-          (route) => false,
+          (route) => true,
     );
   }
 }
