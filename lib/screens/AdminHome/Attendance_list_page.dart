@@ -9,7 +9,7 @@ class AttendanceListPage extends StatelessWidget {
         title: Text('Attendance List'),
       ),
       body: _buildAttendanceList(context),
-    );
+      );
   }
 
   Widget _buildAttendanceList(BuildContext context) {
