@@ -99,6 +99,9 @@ class _QRViewExampleState extends State<QRViewExample> {
       if (!isProcessing) {
         isProcessing = true;
         _processScannedQRCode(scanData.code);
+        Future.delayed(Duration(seconds: 5),(){
+          isProcessing = false;
+        });
       }
     });
   }
