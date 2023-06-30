@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AttendanceListPage extends StatelessWidget {
   @override
@@ -8,8 +9,18 @@ class AttendanceListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Attendance List'),
       ),
-      body: _buildAttendanceList(context),
-      );
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 1.0],
+            colors: [Color(0xff378ad6), Color(0xff2a288a)],
+          ),
+        ),
+        child: _buildAttendanceList(context),
+      ),
+    );
   }
 
   Widget _buildAttendanceList(BuildContext context) {
@@ -34,8 +45,8 @@ class AttendanceListPage extends StatelessWidget {
             final timestamp = document['timestamp']?.toDate() ?? '';
 
             return ListTile(
-              title: Text(memberName),
-              subtitle: Text(timestamp.toString()),
+              title: Text(memberName,style: TextStyle(color: Colors.white),),
+              subtitle: Text(timestamp.toString(),style: TextStyle(color: Colors.white),),
             );
           },
         );

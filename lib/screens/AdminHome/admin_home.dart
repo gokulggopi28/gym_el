@@ -1,15 +1,16 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/provider/auth_provider.dart';
+import 'package:gym_el/screens/AdminHome/Admin%20Navigation_bar.dart';
 import 'package:gym_el/screens/AdminHome/Attendance_list_page.dart';
-import 'package:gym_el/screens/memberhome=%3E/membership_details.dart';
+import 'package:gym_el/screens/AdminHome/Payment/qr_pay.dart';
+import 'package:gym_el/screens/AdminHome/User_list_view.dart';
 import 'package:gym_el/screens/memberhome=%3E/orders_screen.dart';
-import 'package:gym_el/screens/memberhome=%3E/qrviewerscreen.dart';
 import 'package:gym_el/screens/memberhome=%3E/user_product_screen.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../bottom_navigation.dart';
 
 class ScreenHome extends StatelessWidget {
   const ScreenHome({Key? key}) : super(key: key);
@@ -32,6 +33,33 @@ class ScreenHome extends StatelessWidget {
         ],
       ),
 
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.blue,
+        color: Colors.white,
+        items: <Widget>[
+        Icon(Icons.home, color: Colors.blue),
+        Icon(Icons.people, color: Colors.blue),
+        Icon(Icons.settings, color: Colors.blue),
+      ],
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+            // Home icon tapped
+            // Implement your logic here
+              break;
+            case 1:
+            // People icon tapped
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => UserListView()),
+                    (route) => true,
+              );
+              break;
+            case 2:
+            // Settings icon tapped
+            // Implement your logic here
+              break;
+          }
+        },),
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
@@ -58,7 +86,6 @@ class ScreenHome extends StatelessWidget {
                     style: TextStyle(fontSize: 40.0),
                   ),
                 ),
-
               ),
               ListTile(
                 leading: Icon(Icons.home),
@@ -72,15 +99,15 @@ class ScreenHome extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.account_box),
                 title: Text(
-                  "Member's Details",
+                  "Member List",
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => Membership_details()),
-                          (route) => false);
+                    MaterialPageRoute(builder: (context) => UserListView()),
+                        (route) => true,
+                  );
                 },
               ),
               ListTile(
@@ -99,10 +126,16 @@ class ScreenHome extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {},
+                onTap: () {Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => QRPage(),
+                  ),
+                      (route) => true,
+                );
+
+
+                },
               ),
-
-
               ListTile(
                 leading: Icon(Icons.list),
                 title: Text(
@@ -112,10 +145,11 @@ class ScreenHome extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => AttendanceListPage()),
-                          (route) => true);
-
+                    MaterialPageRoute(
+                      builder: (context) => AttendanceListPage(),
+                    ),
+                        (route) => true,
+                  );
                 },
               ),
               ListTile(
@@ -127,28 +161,27 @@ class ScreenHome extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => OrdersScreen()),
-                          (route) => true);
-
-
+                    MaterialPageRoute(
+                      builder: (context) => OrdersScreen(),
+                    ),
+                        (route) => true,
+                  );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.edit),
-                title: const Text('Manage Products',style: TextStyle(
-                  color: Colors.white
-                ),),
+                title: const Text(
+                  'Manage Products',
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () => {
-                Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                builder: (context) => UserProductsScreen()),
-                (route) => true)
-
-
-                  // Navigator.of(context)
-                  //     .pushReplacementNamed(UserProductsScreen.routeName),
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => UserProductsScreen(),
+                    ),
+                        (route) => true,
+                  )
                 },
               ),
               ListTile(
@@ -206,8 +239,7 @@ class ScreenHome extends StatelessWidget {
                       final user = snapshot.data!;
                       return buildAdminContent(ap); // Pass 'ap' as an argument
                     } else {
-                      return Container(
-                      ); // Replace with the appropriate widget
+                      return Container(); // Replace with the appropriate widget
                     }
                   },
                 ),
@@ -216,98 +248,72 @@ class ScreenHome extends StatelessWidget {
           ),
         ),
       ),
+      
     );
   }
 
   Widget buildAdminContent(AuthProvider ap) {
     // Widget tree for the admin view
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+    return Expanded(
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(ap.userModel.profilePic),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage(ap.userModel.profilePic),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              ap.userModel.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              ap.userModel.email,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
                     Text(
-                      ap.userModel.name,
-                      style: const TextStyle(
+                      'Dashboard',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      ap.userModel.email,
-                      textAlign: TextAlign.center, // Align the email to the center
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
+                    // Other widgets and content for the admin view...
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Text(
-              'Dashboard',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
               ),
             ),
 
-            //Expanded(child: AttendanceListPage(),)
-
-
-            // GridView.builder(
-            //     shrinkWrap: true,
-            //     itemCount: _dashboardItem.length,
-            //     primary: false,
-            //     padding: EdgeInsets.only(top: 12.0),
-            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //         crossAxisCount: 2),
-            //     itemBuilder: (context,index){
-            //       Map<String,dynamic> singleDash = _dashboardItem[index];
-            //       return Card(
-            //         child: Container(
-            //           color: Theme.of(context).primaryColor,
-            //           child: Column(
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             children:  [
-            //               Text(singleDash["title"],
-            //                 style: TextStyle(
-            //                 fontSize: 30.0,
-            //                   color: Colors.white
-            //
-            //               ),),
-            //               Text(singleDash["subtitle"],style: TextStyle(
-            //                   fontSize: 20.0,
-            //                   color: Colors.white
-            //
-            //               ),),
-            //             ],
-            //           ),
-            //
-            //         ),
-            //
-            //       );
-            //     })
           ],
         ),
       ),
@@ -320,62 +326,6 @@ class ScreenHome extends StatelessWidget {
     Navigator.of(ctx).pushAndRemoveUntil(
       MaterialPageRoute(builder: (ctx1) => WelcomeScreen()),
           (route) => true,
-    );
-  }
-}
-
-class HomeBottomNavigation extends StatefulWidget {
-  const HomeBottomNavigation({Key? key}) : super(key: key);
-
-  @override
-  _HomeBottomNavigationState createState() => _HomeBottomNavigationState();
-}
-
-class _HomeBottomNavigationState extends State<HomeBottomNavigation> {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    ExploreScreen(),
-    NotificationsScreen(),
-    ProfileScreen(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<int>(
-      valueListenable: ScreenHome.selectedIndexNotifier,
-      builder: (context, selectedIndex, child) {
-        return Scaffold(
-          body: IndexedStack(
-            index: selectedIndex,
-            children: _screens,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              ScreenHome.selectedIndexNotifier.value = index;
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                label: 'Explore',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: 'Notifications',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

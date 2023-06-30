@@ -29,6 +29,7 @@ class UserProductsScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
           ),
         ],
+        automaticallyImplyLeading: true,
       ),
       // drawer: const AppDrawer(),
       body: RefreshIndicator(

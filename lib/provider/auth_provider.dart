@@ -41,7 +41,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future setSignIn() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
-    s.setBool("is_signedin", true);
+    s.setBool("is_signedIn", true);
     _isSignedIn = true;
     notifyListeners();
   }

@@ -55,6 +55,9 @@ dependencies:
   date_format: ^2.0.7
   intl: ^0.18.1
   firebase_database: ^10.2.3
+  share_plus: ^7.0.2
+  qr_image: ^1.0.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +96,8 @@ flutter:
     - assets/images/prot.webp
     - assets/images/multi.webp
     - assets/images/mass.webp
+    - assets/images/bhim.svg
+    - assets/images/upi.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

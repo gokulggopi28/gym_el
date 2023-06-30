@@ -20,7 +20,8 @@ class _QRViewExampleState extends State<QRViewExample> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  bool isProcessing = false; // Flag variable to track attendance registration
+  bool isProcessing = false; // Flag variable to track the processing state of a scan
+  String? lastScannedData; // Variable to store the last scanned QR code data
 
   @override
   Widget build(BuildContext context) {
@@ -96,41 +97,17 @@ class _QRViewExampleState extends State<QRViewExample> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      if (!isProcessing) {
+      if (!isProcessing && lastScannedData != scanData.code) {
+        lastScannedData = scanData.code; // Update the last scanned QR code data
         isProcessing = true;
         _processScannedQRCode(scanData.code);
-        Future.delayed(Duration(seconds: 5),(){
+
+        Future.delayed(Duration(seconds: 2), () {
           isProcessing = false;
+          lastScannedData = null; // Reset the last scanned QR code data after the cooldown period
         });
       }
     });
-  }
-
-  Future<void> _processScannedQRCode(String? qrCodeData) async {
-    if (qrCodeData != null) {
-      if (qrCodeData == 'Gym Elite Attendance') {
-        try {
-          final ap = Provider.of<AuthProvider>(context, listen: false);
-          final attendanceData = {
-            'Member Name': ap.userModel.name,
-            'userId': ap.uid,
-            'timestamp': DateTime.now(),
-          };
-          await FirebaseFirestore.instance
-              .collection('attendance')
-              .add(attendanceData);
-          _showSuccessSnackBar();
-        } catch (error) {
-          print('Error registering attendance: $error');
-          _showErrorSnackBar('Error registering attendance');
-        }
-      } else
-          {
-        _showErrorSnackBar('Invalid QR code');
-      }
-    } else {
-      _showErrorSnackBar('Invalid QR code');
-    }
   }
 
   void _showSuccessSnackBar() {
@@ -140,6 +117,53 @@ class _QRViewExampleState extends State<QRViewExample> {
         backgroundColor: Colors.green,
       ),
     );
+  }
+
+  Future<void> _processScannedQRCode(String? qrCodeData) async {
+    if (qrCodeData != null) {
+      final ap = Provider.of<AuthProvider>(context, listen: false);
+
+      if (qrCodeData == 'Gym Elite Attendance') {
+        try {
+          final attendanceData = {
+            'Member Name': ap.userModel.name,
+            'userId': ap.uid,
+            'timestamp': DateTime.now(),
+          };
+
+          // Check if the attendance data already exists in Firestore
+          final existingAttendance = await FirebaseFirestore.instance
+              .collection('attendance')
+              .where('userId', isEqualTo: ap.uid)
+              .where('timestamp', isEqualTo: attendanceData['timestamp'])
+              .get();
+
+          if (existingAttendance.docs.isEmpty) {
+            // Attendance data doesn't exist, add it to Firestore
+            await FirebaseFirestore.instance
+                .collection('attendance')
+                .add(attendanceData);
+            _showSuccessSnackBar();
+          } else {
+            // Attendance data already exists, show a message or perform any desired action
+            _showErrorSnackBar('Attendance already registered');
+          }
+        } catch (error) {
+          print('Error registering attendance: $error');
+          _showErrorSnackBar('Error registering attendance');
+        }
+      } else if (qrCodeData == 'Other Entry') {
+        // Handle the other entry type
+        // Perform any desired action or add the corresponding data to Firestore
+        _showSuccessSnackBar();
+      } else {
+        _showErrorSnackBar('Invalid QR code');
+      }
+    } else {
+      _showErrorSnackBar('Invalid QR code');
+    }
+
+    isProcessing = false; // Reset the flag to false after processing the QR code
   }
 
   void _showErrorSnackBar(String message) {
