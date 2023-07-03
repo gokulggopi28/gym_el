@@ -1,24 +1,37 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gym_el/provider/auth_provider.dart';
-import 'package:gym_el/screens/AdminHome/Admin%20Navigation_bar.dart';
 import 'package:gym_el/screens/AdminHome/Attendance_list_page.dart';
 import 'package:gym_el/screens/AdminHome/Payment/qr_pay.dart';
 import 'package:gym_el/screens/AdminHome/User_list_view.dart';
+import 'package:gym_el/screens/AdminHome/new_reg.dart';
 import 'package:gym_el/screens/memberhome=%3E/orders_screen.dart';
 import 'package:gym_el/screens/memberhome=%3E/user_product_screen.dart';
 import 'package:gym_el/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ScreenHome extends StatelessWidget {
+class ScreenHome extends StatefulWidget {
+
+
   const ScreenHome({Key? key}) : super(key: key);
 
   static ValueNotifier<int> selectedIndexNotifier = ValueNotifier(0);
 
   @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  int _selectedIndex = 0;
+
+
+
+  @override
   Widget build(BuildContext context) {
+    final DateTime createdAt;
     final ap = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
@@ -32,15 +45,14 @@ class ScreenHome extends StatelessWidget {
           )
         ],
       ),
-
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.blue,
         color: Colors.white,
         items: <Widget>[
-        Icon(Icons.home, color: Colors.blue),
-        Icon(Icons.people, color: Colors.blue),
-        Icon(Icons.settings, color: Colors.blue),
-      ],
+          Icon(Icons.home, color: Colors.blue),
+          Icon(Icons.people, color: Colors.blue),
+          Icon(Icons.settings, color: Colors.blue),
+        ],
         onTap: (int index) {
           switch (index) {
             case 0:
@@ -59,7 +71,8 @@ class ScreenHome extends StatelessWidget {
             // Implement your logic here
               break;
           }
-        },),
+        },
+      ),
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
@@ -77,7 +90,9 @@ class ScreenHome extends StatelessWidget {
                 accountEmail: Text(ap.userModel.email),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor:
-                  Theme.of(context).platform == TargetPlatform.iOS
+                  Theme
+                      .of(context)
+                      .platform == TargetPlatform.iOS
                       ? Colors.blue
                       : Colors.white,
                   backgroundImage: NetworkImage(ap.userModel.profilePic),
@@ -126,14 +141,13 @@ class ScreenHome extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => QRPage(),
-                  ),
-                      (route) => true,
-                );
-
-
+                onTap: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => QRPage(),
+                    ),
+                        (route) => true,
+                  );
                 },
               ),
               ListTile(
@@ -175,7 +189,8 @@ class ScreenHome extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () => {
+                onTap: () =>
+                {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => UserProductsScreen(),
@@ -202,12 +217,13 @@ class ScreenHome extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   ap.userSignOut().then(
-                        (value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
-                      ),
-                    ),
+                        (value) =>
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WelcomeScreen(),
+                          ),
+                        ),
                   );
                 },
               ),
@@ -221,8 +237,14 @@ class ScreenHome extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: Form(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -248,140 +270,204 @@ class ScreenHome extends StatelessWidget {
           ),
         ),
       ),
-      
     );
   }
 
   Widget buildAdminContent(AuthProvider ap) {
-    // Widget tree for the admin view
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage(ap.userModel.profilePic),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              ap.userModel.name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+    final currentDate = DateTime.now();
+    final today = DateTime(
+        currentDate.year, currentDate.month, currentDate.day);
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection(
+          'attendance').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasData) {
+          final attendanceEntries = snapshot.data!.docs.length;
+          final totalEntries = 100;
+          final attendanceCount = (attendanceEntries / totalEntries) * 100;
+
+
+          return Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage:
+                                NetworkImage(ap.userModel.profilePic),
                               ),
-                            ),
-                            Text(
-                              ap.userModel.email,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
+                              SizedBox(
+                                width: 20,
                               ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ap.userModel.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  Text(
+                                    ap.userModel.email,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            'Dashboard',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff2a288a),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
+                          ),
+
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            'Attendance',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 10,
+                            child: LinearProgressIndicator(
+                              value: attendanceCount / 100,
+                              color: Colors.green,
+                              backgroundColor: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            '$attendanceCount % Attendance',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+
+                          Text(
+                            'New Registration',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .orderBy('createdAt', descending: true)
+                        .snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+
+                  final currentTime = Timestamp.now();
+                  final registeredWithinThreeDaysUsers = snapshot.data!.docs.where((user) {
+                    final createdAt = user['createdAt'];
+                    if (createdAt is String) {
+                      try {
+                        final parsedDate = DateTime.parse(createdAt);
+                        return currentTime.toDate().difference(parsedDate).inDays <= 3;
+                      } catch (e) {
+                        print('Invalid date format: $createdAt');
+                        return false;
+                      }
+                    }
+                    return false;
+                  }).toList();
+
+                  final registrationProgress = registeredWithinThreeDaysUsers.length;
+
+                    LinearProgressIndicator(
+                      value: registrationProgress/10,
+                      color: Colors.green,
+                      backgroundColor: Colors.grey,
+
+                    );
+
+
+                  return Column(
+                    children: [
+                      Text(
+                        '$registrationProgress Users Registered Within 3 Days',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Text(
-                      'Dashboard',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
                       ),
+                    ],
+                  );
+                },
+
+              )
+
+
+
+
+              ],),
                     ),
-                    // Other widgets and content for the admin view...
-                  ],
-                ),
+                  ),
+                ],
+
               ),
             ),
-
-          ],
-        ),
-      ),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 
-  void signOut(BuildContext ctx) async {
-    final _sharedPrefs = await SharedPreferences.getInstance();
-    await _sharedPrefs.clear();
-    Navigator.of(ctx).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (ctx1) => WelcomeScreen()),
-          (route) => true,
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Home Screen',
-        style: TextStyle(fontSize: 24),
-      ),
+  void signOut(BuildContext context) async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    await FirebaseAuth.instance.signOut();
+    await sp.clear();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const ScreenHome()),
+          (route) => false,
     );
   }
 }
 
-class ExploreScreen extends StatelessWidget {
-  const ExploreScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Explore Screen',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-}
-
-class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Notifications Screen',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Profile Screen',
-        style: TextStyle(fontSize: 24),
-      ),
-    );
-  }
-}

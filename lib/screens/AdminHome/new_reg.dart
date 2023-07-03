@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:provider/provider.dart';
-import 'package:gym_el/provider/auth_provider.dart';
 
-class UserListView extends StatelessWidget {
+class RegistrationProgressPage extends StatefulWidget {
+  @override
+  _RegistrationProgressPageState createState() => _RegistrationProgressPageState();
+}
+
+class _RegistrationProgressPageState extends State<RegistrationProgressPage> {
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('User List'),
-        automaticallyImplyLeading: true,
+        title: Text('Registration Progress'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -26,8 +25,7 @@ class UserListView extends StatelessWidget {
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .orderBy('createdAt',
-              descending: true)
+              .orderBy('createdAt', descending: true)
               .snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -48,10 +46,23 @@ class UserListView extends StatelessWidget {
               );
             }
 
+            final currentTime = Timestamp.now();
+            final registeredWithinThreeDaysUsers = snapshot.data!.docs.where((user) {
+              final createdAt = user['createdAt'] as Timestamp;
+              final difference = currentTime.toDate().difference(createdAt.toDate()).inDays;
+              return difference <= 3;
+            }).toList();
+
+            if (registeredWithinThreeDaysUsers.isEmpty) {
+              return Center(
+                child: Text('No users registered within the last 3 days.'),
+              );
+            }
+
             return ListView.builder(
-              itemCount: snapshot.data!.size,
+              itemCount: registeredWithinThreeDaysUsers.length,
               itemBuilder: (BuildContext context, int index) {
-                final user = snapshot.data!.docs[index];
+                final user = registeredWithinThreeDaysUsers[index];
                 final uid = user.id;
 
                 return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>?>(
@@ -64,6 +75,7 @@ class UserListView extends StatelessWidget {
                         ),
                         title: Text('Loading...'),
                         subtitle: Text(''),
+                        trailing: LinearProgressIndicator(),
                       );
                     }
 
@@ -102,10 +114,7 @@ class UserListView extends StatelessWidget {
 
   Future<DocumentSnapshot<Map<String, dynamic>>?> _getUser(String uid) async {
     try {
-      final userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      final userSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
       return userSnapshot;
     } catch (e) {
       print('Error retrieving user data: $e');

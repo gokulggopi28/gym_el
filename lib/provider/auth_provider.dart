@@ -9,6 +9,7 @@ import 'package:gym_el/screens/AdminHome/admin_home.dart';
 import 'package:gym_el/member_otp.dart';
 import 'package:gym_el/model/user_model.dart';
 import 'package:gym_el/screens/memberhome=%3E/home_member.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/utils.dart';
@@ -137,8 +138,9 @@ class AuthProvider extends ChangeNotifier {
       // Upload image to Firebase storage
       await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
         userModel.profilePic = value;
-        userModel.createdAt =
-            DateTime.now().millisecondsSinceEpoch.toString();
+        userModel.createdAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+         DateTime.now().millisecondsSinceEpoch.toString();
         userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
         userModel.uid = _firebaseAuth.currentUser!.uid!;
 

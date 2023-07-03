@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_el/bottom_navigation.dart';
 import 'package:gym_el/provider/auth_provider.dart';
@@ -15,13 +16,54 @@ import 'package:gym_el/widget/badge.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class HomeMemberPage extends StatelessWidget {
+class HomeMemberPage extends StatefulWidget {
+  @override
+  State<HomeMemberPage> createState() => _HomeMemberPageState();
+}
+
+class _HomeMemberPageState extends State<HomeMemberPage>
+    with SingleTickerProviderStateMixin{
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+
   QRViewController? controller;
+
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
   QrScannerOverlayShape overlay = QrScannerOverlayShape();
+
   int activeIndex = 0;
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+    super.initState();
+  }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleDrawer() {
+    if (_animationController.isDismissed) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
+
+  @override
+
   Widget build(BuildContext context) {
     List<String> imagePaths = [
       'assets/images/whey.jpg',
@@ -37,7 +79,40 @@ class HomeMemberPage extends StatelessWidget {
     var _showFavouritesOnly = false;
     final ap = Provider.of<AuthProvider>(context, listen: true);
     return Scaffold(
-      bottomNavigationBar: const HomeBottomNavigation(),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff378ad6), Color(0xff2a288a)],  // Set your desired gradient colors
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: CurvedNavigationBar(
+          backgroundColor: Colors.transparent,
+          color: Colors.transparent,
+          items: <Widget>[
+            Icon(Icons.home, color: Colors.white),
+            Icon(Icons.verified_user, color: Colors.white),
+            Icon(Icons.settings, color: Colors.white),
+          ],
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+              // Home icon tapped
+              // Implement your logic here
+                break;
+              case 1:
+              // People icon tapped
+              // Implement your logic here
+                break;
+              case 2:
+              // Settings icon tapped
+              // Implement your logic here
+                break;
+            }
+          },
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.blue[500],
         elevation: 0,

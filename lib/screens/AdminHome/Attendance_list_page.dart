@@ -44,9 +44,13 @@ class AttendanceListPage extends StatelessWidget {
             final memberName = document['Member Name'] ?? '';
             final timestamp = document['timestamp']?.toDate() ?? '';
 
+            final formattedTimestamp =
+            DateFormat.yMMMd().add_jm().format(timestamp);
+
             return ListTile(
               title: Text(memberName,style: TextStyle(color: Colors.white),),
-              subtitle: Text(timestamp.toString(),style: TextStyle(color: Colors.white),),
+              subtitle: Text(timestamp.toString(),
+                style: TextStyle(color: Colors.white),),
             );
           },
         );
